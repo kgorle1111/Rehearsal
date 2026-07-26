@@ -5,6 +5,7 @@
 # ── Private planning material (never published) ──────────────
 # These are internal working documents, not part of the product.
 plans/
+misc/plans/
 *.private.md
 
 # ── Human-labeled calibration data & any recorded audio ──────
