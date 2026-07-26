@@ -1,0 +1,117 @@
+{
+  "scenario_id": "sc_0004_hypertension_med_change",
+  "schema_version": "1.0.0",
+  "clinical_state": {
+    "condition": "essential hypertension",
+    "medications": [
+      {
+        "name": "lisinopril",
+        "dose": "20",
+        "unit": "mg",
+        "route": "oral",
+        "frequency_per_day": 1,
+        "duration": "2 years"
+      },
+      {
+        "name": "hydrochlorothiazide",
+        "dose": "25",
+        "unit": "mg",
+        "route": "oral",
+        "frequency_per_day": 1,
+        "duration": "6 months"
+      }
+    ],
+    "symptom_timeline": [
+      {
+        "offset": "10 days ago",
+        "symptom": "dry cough that will not go away"
+      },
+      {
+        "offset": "3 days ago",
+        "symptom": "dizziness on standing up"
+      }
+    ],
+    "allergies": [
+      {
+        "substance": "aspirin"
+      }
+    ],
+    "emotional_state": "embarrassed",
+    "health_literacy": "moderate",
+    "language_variety": "es-neutral",
+    "onset": "10 days ago, gradual"
+  },
+  "difficulty": {
+    "numeric_density": 4,
+    "idiom_load": 1,
+    "emotional_load": 2,
+    "register_distance": 2,
+    "overlap_pressure": 1,
+    "band": "advanced"
+  },
+  "term_manifest": [
+    {
+      "term_id": "med_lisinopril_dose",
+      "kind": "dosage",
+      "en": "20 mg",
+      "es": "20 mg",
+      "critical": true,
+      "acceptable_renderings": [
+        "20 mg",
+        "twenty mg",
+        "veinte mg",
+        "20 milligrams",
+        "20 miligramos"
+      ]
+    },
+    {
+      "term_id": "med_hctz_dose",
+      "kind": "dosage",
+      "en": "25 mg",
+      "es": "25 mg",
+      "critical": true,
+      "acceptable_renderings": [
+        "25 mg",
+        "twenty-five mg",
+        "veinticinco mg",
+        "25 milligrams",
+        "25 miligramos"
+      ]
+    },
+    {
+      "term_id": "med_lisinopril_frequency",
+      "kind": "frequency",
+      "en": "once a day",
+      "es": "una vez al dia",
+      "critical": true,
+      "acceptable_renderings": [
+        "once a day",
+        "una vez al dia"
+      ]
+    },
+    {
+      "term_id": "alg_aspirin",
+      "kind": "allergy",
+      "en": "aspirin",
+      "es": "aspirina",
+      "critical": true,
+      "acceptable_renderings": [
+        "aspirin",
+        "aspirina",
+        "aspirins",
+        "aspirinas"
+      ]
+    }
+  ],
+  "review": {
+    "status": "pending",
+    "reviewer": null
+  },
+  "title_en": "Follow-up: hypertension dose increase and new side-effect concern",
+  "provenance": {
+    "author": "agent-authored, unreviewed",
+    "limitations": [
+      "Dose-adjustment rationale is simplified for the exercise, not a titration protocol."
+    ]
+  }
+}

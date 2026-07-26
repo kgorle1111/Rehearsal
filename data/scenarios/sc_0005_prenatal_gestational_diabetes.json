@@ -1,0 +1,88 @@
+{
+  "scenario_id": "sc_0005_prenatal_gestational_diabetes",
+  "schema_version": "1.0.0",
+  "clinical_state": {
+    "condition": "gestational diabetes mellitus",
+    "medications": [
+      {
+        "name": "prenatal vitamin",
+        "dose": "1",
+        "unit": "tablet",
+        "route": "oral",
+        "frequency_per_day": 1,
+        "duration": "ongoing"
+      }
+    ],
+    "symptom_timeline": [
+      {
+        "offset": "1 week ago",
+        "symptom": "abnormal glucose tolerance test result"
+      },
+      {
+        "offset": "2 days ago",
+        "symptom": "started checking blood sugar 4 times a day"
+      }
+    ],
+    "allergies": [],
+    "emotional_state": "fearful",
+    "health_literacy": "low",
+    "language_variety": "es-MX-rural-central",
+    "onset": "1 week ago, sudden diagnosis"
+  },
+  "difficulty": {
+    "numeric_density": 3,
+    "idiom_load": 3,
+    "emotional_load": 4,
+    "register_distance": 3,
+    "overlap_pressure": 2,
+    "band": "advanced"
+  },
+  "term_manifest": [
+    {
+      "term_id": "glucose_check_frequency",
+      "kind": "frequency",
+      "en": "four times a day",
+      "es": "cuatro veces al dia",
+      "critical": true,
+      "acceptable_renderings": [
+        "four times a day",
+        "cuatro veces al dia"
+      ]
+    },
+    {
+      "term_id": "tl_1_offset",
+      "kind": "temporal",
+      "en": "1 week ago",
+      "es": "hace 1 semana",
+      "critical": true,
+      "acceptable_renderings": [
+        "1 week ago",
+        "hace 1 semana",
+        "one week ago",
+        "hace uno semana"
+      ]
+    },
+    {
+      "term_id": "med_prenatal_frequency",
+      "kind": "frequency",
+      "en": "once a day",
+      "es": "una vez al dia",
+      "critical": true,
+      "acceptable_renderings": [
+        "once a day",
+        "una vez al dia"
+      ]
+    }
+  ],
+  "review": {
+    "status": "pending",
+    "reviewer": null
+  },
+  "title_en": "Prenatal visit: newly diagnosed gestational diabetes, diet and monitoring plan",
+  "provenance": {
+    "author": "agent-authored, unreviewed",
+    "limitations": [
+      "Gestational diabetes management shown is illustrative; not an obstetric guideline reference."
+    ]
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "scenario_id": "sc_0001_dm2_metformin_counseling",
+  "schema_version": "1.0.0",
+  "clinical_state": {
+    "condition": "type 2 diabetes mellitus",
+    "medications": [
+      {
+        "name": "metformin",
+        "dose": "500",
+        "unit": "mg",
+        "route": "oral",
+        "frequency_per_day": 2,
+        "duration": "4 years"
+      }
+    ],
+    "symptom_timeline": [
+      {
+        "offset": "3 weeks ago",
+        "symptom": "increased thirst and fatigue"
+      },
+      {
+        "offset": "4 days ago",
+        "symptom": "woke at night short of breath, twice"
+      }
+    ],
+    "allergies": [
+      {
+        "substance": "penicillin"
+      }
+    ],
+    "emotional_state": "worried",
+    "health_literacy": "low",
+    "language_variety": "es-MX-rural-central",
+    "onset": "3 weeks ago, gradual"
+  },
+  "difficulty": {
+    "numeric_density": 3,
+    "idiom_load": 2,
+    "emotional_load": 2,
+    "register_distance": 3,
+    "overlap_pressure": 1,
+    "band": "intermediate"
+  },
+  "term_manifest": [
+    {
+      "term_id": "med_metformin_dose",
+      "kind": "dosage",
+      "en": "500 mg",
+      "es": "500 mg",
+      "critical": true,
+      "acceptable_renderings": [
+        "500 mg",
+        "500 milligrams",
+        "500 miligramos"
+      ]
+    },
+    {
+      "term_id": "med_metformin_frequency",
+      "kind": "frequency",
+      "en": "twice a day",
+      "es": "dos veces al dia",
+      "critical": true,
+      "acceptable_renderings": [
+        "twice a day",
+        "dos veces al dia"
+      ]
+    },
+    {
+      "term_id": "alg_pcn",
+      "kind": "allergy",
+      "en": "penicillin",
+      "es": "penicilina",
+      "critical": true,
+      "acceptable_renderings": [
+        "penicillin",
+        "penicilina",
+        "penicillins",
+        "penicilinas"
+      ]
+    },
+    {
+      "term_id": "tl_2_offset",
+      "kind": "temporal",
+      "en": "4 days ago",
+      "es": "hace 4 dias",
+      "critical": true,
+      "acceptable_renderings": [
+        "4 days ago",
+        "hace 4 dias",
+        "four days ago",
+        "hace cuatro dias"
+      ]
+    }
+  ],
+  "review": {
+    "status": "pending",
+    "reviewer": null
+  },
+  "title_en": "Follow-up visit: poorly controlled type 2 diabetes, metformin adherence",
+  "provenance": {
+    "author": "agent-authored, unreviewed",
+    "limitations": [
+      "Cardiac work-up depth is shallow; this is an interpreting exercise, not a cardiology case."
+    ]
+  }
+}

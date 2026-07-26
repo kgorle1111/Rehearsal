@@ -1,0 +1,108 @@
+{
+  "scenario_id": "sc_0003_asthma_inhaler_technique",
+  "schema_version": "1.0.0",
+  "clinical_state": {
+    "condition": "persistent asthma",
+    "medications": [
+      {
+        "name": "fluticasone",
+        "dose": "110",
+        "unit": "mcg",
+        "route": "inhaled",
+        "frequency_per_day": 2,
+        "duration": "8 months"
+      },
+      {
+        "name": "albuterol",
+        "dose": "90",
+        "unit": "mcg",
+        "route": "inhaled",
+        "frequency_per_day": 4,
+        "duration": "as needed, 8 months"
+      }
+    ],
+    "symptom_timeline": [
+      {
+        "offset": "2 weeks ago",
+        "symptom": "nighttime cough three times a week"
+      },
+      {
+        "offset": "yesterday",
+        "symptom": "used rescue inhaler twice during recess"
+      }
+    ],
+    "allergies": [],
+    "emotional_state": "frustrated",
+    "health_literacy": "low",
+    "language_variety": "es-US-heritage",
+    "onset": "2 weeks ago, gradual"
+  },
+  "difficulty": {
+    "numeric_density": 3,
+    "idiom_load": 2,
+    "emotional_load": 3,
+    "register_distance": 2,
+    "overlap_pressure": 2,
+    "band": "intermediate"
+  },
+  "term_manifest": [
+    {
+      "term_id": "med_fluticasone_dose",
+      "kind": "dosage",
+      "en": "110 mcg",
+      "es": "110 mcg",
+      "critical": true,
+      "acceptable_renderings": [
+        "110 mcg",
+        "110 micrograms",
+        "110 microgramos"
+      ]
+    },
+    {
+      "term_id": "med_fluticasone_frequency",
+      "kind": "frequency",
+      "en": "twice a day",
+      "es": "dos veces al dia",
+      "critical": true,
+      "acceptable_renderings": [
+        "twice a day",
+        "dos veces al dia"
+      ]
+    },
+    {
+      "term_id": "med_albuterol_frequency",
+      "kind": "frequency",
+      "en": "four times a day as needed",
+      "es": "cuatro veces al dia si es necesario",
+      "critical": true,
+      "acceptable_renderings": [
+        "four times a day as needed",
+        "cuatro veces al dia si es necesario"
+      ]
+    },
+    {
+      "term_id": "tl_1_offset",
+      "kind": "temporal",
+      "en": "2 weeks ago",
+      "es": "hace 2 semanas",
+      "critical": true,
+      "acceptable_renderings": [
+        "2 weeks ago",
+        "hace 2 semanas",
+        "two weeks ago",
+        "hace dos semanas"
+      ]
+    }
+  ],
+  "review": {
+    "status": "pending",
+    "reviewer": null
+  },
+  "title_en": "Follow-up: pediatric asthma controller adherence, parent as accompanying adult",
+  "provenance": {
+    "author": "agent-authored, unreviewed",
+    "limitations": [
+      "Pediatric dosing shown is illustrative; not validated against a pediatric formulary."
+    ]
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "scenario_id": "sc_0002_pcn_allergy_intake",
+  "schema_version": "1.0.0",
+  "clinical_state": {
+    "condition": "acute sinusitis",
+    "medications": [
+      {
+        "name": "amoxicillin-clavulanate",
+        "dose": "875",
+        "unit": "mg",
+        "route": "oral",
+        "frequency_per_day": 2,
+        "duration": "10 days"
+      }
+    ],
+    "symptom_timeline": [
+      {
+        "offset": "6 days ago",
+        "symptom": "facial pressure and thick nasal discharge"
+      },
+      {
+        "offset": "2 days ago",
+        "symptom": "fever of 101 F"
+      }
+    ],
+    "allergies": [
+      {
+        "substance": "penicillin"
+      },
+      {
+        "substance": "sulfa drugs"
+      }
+    ],
+    "emotional_state": "distracted",
+    "health_literacy": "moderate",
+    "language_variety": "es-MX-urban",
+    "onset": "6 days ago, gradual"
+  },
+  "difficulty": {
+    "numeric_density": 2,
+    "idiom_load": 1,
+    "emotional_load": 1,
+    "register_distance": 2,
+    "overlap_pressure": 1,
+    "band": "introductory"
+  },
+  "term_manifest": [
+    {
+      "term_id": "alg_pcn",
+      "kind": "allergy",
+      "en": "penicillin",
+      "es": "penicilina",
+      "critical": true,
+      "acceptable_renderings": [
+        "penicillin",
+        "penicilina",
+        "penicillins",
+        "penicilinas"
+      ]
+    },
+    {
+      "term_id": "alg_sulfa",
+      "kind": "allergy",
+      "en": "sulfa drugs",
+      "es": "medicamentos con sulfa",
+      "critical": true,
+      "acceptable_renderings": [
+        "sulfa drugs",
+        "medicamentos con sulfa"
+      ]
+    },
+    {
+      "term_id": "med_amox_dose",
+      "kind": "dosage",
+      "en": "875 mg",
+      "es": "875 mg",
+      "critical": true,
+      "acceptable_renderings": [
+        "875 mg",
+        "875 milligrams",
+        "875 miligramos"
+      ]
+    },
+    {
+      "term_id": "med_amox_frequency",
+      "kind": "frequency",
+      "en": "twice a day",
+      "es": "dos veces al dia",
+      "critical": true,
+      "acceptable_renderings": [
+        "twice a day",
+        "dos veces al dia"
+      ]
+    }
+  ],
+  "review": {
+    "status": "pending",
+    "reviewer": null
+  },
+  "title_en": "New-patient intake: penicillin allergy and amoxicillin substitution",
+  "provenance": {
+    "author": "agent-authored, unreviewed",
+    "limitations": [
+      "Antibiotic selection reasoning is illustrative, not a clinical guideline reference."
+    ]
+  }
+}
