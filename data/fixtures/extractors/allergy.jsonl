@@ -1,0 +1,5 @@
+{"text": "I am allergic to penicillin", "lang": "en", "expect": [{"allergen_entity_id": "med.penicillin", "allergen": "penicillin", "polarity": "allergic", "span": [17, 27]}]}
+{"text": "Soy alérgico a la penicilina", "lang": "es", "expect": [{"allergen_entity_id": "med.penicillin", "allergen": "penicilina", "polarity": "allergic", "span": [18, 28]}]}
+{"text": "I am not allergic to penicillin", "lang": "en", "expect": [{"allergen_entity_id": "med.penicillin", "allergen": "penicillin", "polarity": "not_allergic", "span": [21, 31]}]}
+{"text": "No soy alérgico a la penicilina", "lang": "es", "expect": [{"allergen_entity_id": "med.penicillin", "allergen": "penicilina", "polarity": "not_allergic", "span": [21, 31]}]}
+{"text": "no known allergies", "lang": "en", "expect": []}

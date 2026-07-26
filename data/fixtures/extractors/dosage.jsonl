@@ -1,0 +1,10 @@
+{"text": "Take 500 mg once daily.", "lang": "en", "expect": [{"value": "500", "unit": "mg", "family": "mass", "base_value": "500", "span": [5, 11]}]}
+{"text": "Tome 500 miligramos cada día.", "lang": "es", "expect": [{"value": "500", "unit": "mg", "family": "mass", "base_value": "500", "span": [5, 19]}]}
+{"text": "The dose is 0.5 mcg.", "lang": "en", "expect": [{"value": "0.5", "unit": "mg", "family": "mass", "base_value": "0.0005", "span": [12, 19]}]}
+{"text": "La dosis es 0,5 µg.", "lang": "es", "expect": [{"value": "0.5", "unit": "mg", "family": "mass", "base_value": "0.0005", "span": [12, 18]}]}
+{"text": "take two tablets", "lang": "en", "expect": [{"value": "2", "unit": null, "family": "count", "base_value": "2", "span": [5, 16]}]}
+{"text": "tome dos pastillas", "lang": "es", "expect": [{"value": "2", "unit": null, "family": "count", "base_value": "2", "span": [5, 18]}]}
+{"text": "5 mL of syrup", "lang": "en", "expect": [{"value": "5", "unit": "mL", "family": "volume", "base_value": "5", "span": [0, 4]}]}
+{"text": "una cucharadita de jarabe", "lang": "es", "expect": [{"value": "1", "unit": "mL", "family": "volume", "base_value": "5", "span": [0, 15]}]}
+{"text": "100 mg/5", "lang": "en", "expect": [{"value": "100", "unit": "mg", "family": "mass", "base_value": "100", "span": [0, 6]}, {"value": "5", "unit": null, "family": null, "base_value": null, "span": [7, 8]}]}
+{"text": "no dosage mentioned here", "lang": "en", "expect": []}

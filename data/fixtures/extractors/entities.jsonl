@@ -1,0 +1,5 @@
+{"text": "Take metformin twice a day", "lang": "en", "expect": [{"entity_id": "med.metformin", "kind": "medication", "surface": "metformin", "span": [5, 14], "matched_fuzzy": false}]}
+{"text": "Tome metformina dos veces al dia", "lang": "es", "expect": [{"entity_id": "med.metformin", "kind": "medication", "surface": "metformina", "span": [5, 15], "matched_fuzzy": false}]}
+{"text": "Pain in the left knee", "lang": "en", "expect": [{"entity_id": "site.knee", "kind": "body_site", "surface": "knee", "span": [17, 21], "matched_fuzzy": false}]}
+{"text": "Take metformnia daily", "lang": "en", "expect": [{"entity_id": "med.metformin", "kind": "medication", "surface": "metformnia", "span": [5, 15], "matched_fuzzy": true}]}
+{"text": "xyzzy quux", "lang": "en", "expect": []}

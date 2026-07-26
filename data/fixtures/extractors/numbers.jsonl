@@ -1,0 +1,13 @@
+{"text": "The patient takes 500 mg.", "lang": "en", "expect": [{"value": "500", "span": [18, 21], "written": false, "approximate": false}]}
+{"text": "Tome 0,5 mg cada día.", "lang": "es", "expect": [{"value": "0.5", "span": [5, 8], "written": false, "approximate": false}]}
+{"text": "El costo es de 1.500 pesos.", "lang": "es", "expect": [{"value": "1500", "span": [15, 20], "written": false, "approximate": false}]}
+{"text": "about 500 milligrams", "lang": "en", "expect": [{"value": "500", "span": [6, 9], "written": false, "approximate": true}]}
+{"text": "unos cinco tomates", "lang": "es", "expect": [{"value": "5", "span": [5, 10], "written": true, "approximate": true}]}
+{"text": "take one tablet", "lang": "en", "expect": [{"value": "1", "span": [5, 8], "written": true, "approximate": false}]}
+{"text": "tome dos pastillas", "lang": "es", "expect": [{"value": "2", "span": [5, 8], "written": true, "approximate": false}]}
+{"text": "1,500 mg", "lang": "en", "expect": [{"value": "1500", "span": [0, 5], "written": false, "approximate": false}]}
+{"text": "1,500 mg", "lang": "es", "expect": [{"value": "1.500", "span": [0, 5], "written": false, "approximate": false}]}
+{"text": "2.75 mL", "lang": "en", "expect": [{"value": "2.75", "span": [0, 4], "written": false, "approximate": false}]}
+{"text": "2,75 mL", "lang": "es", "expect": [{"value": "2.75", "span": [0, 4], "written": false, "approximate": false}]}
+{"text": "No numbers here", "lang": "en", "expect": []}
+{"text": "cinco", "lang": "es", "expect": [{"value": "5", "span": [0, 5], "written": true, "approximate": false}]}

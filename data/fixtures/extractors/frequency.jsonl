@@ -1,0 +1,13 @@
+{"text": "take it every 8 hours", "lang": "en", "expect": [{"per_day": "3", "interval_hours": "8", "prn": false, "at_night": false, "span": [8, 21]}]}
+{"text": "tomelo cada 8 horas", "lang": "es", "expect": [{"per_day": "3", "interval_hours": "8", "prn": false, "at_night": false, "span": [7, 19]}]}
+{"text": "three times a day", "lang": "en", "expect": [{"per_day": "3", "interval_hours": null, "prn": false, "at_night": false, "span": [0, 17]}]}
+{"text": "3 veces al dia", "lang": "es", "expect": [{"per_day": "3", "interval_hours": null, "prn": false, "at_night": false, "span": [0, 14]}]}
+{"text": "once a day", "lang": "en", "expect": [{"per_day": "1", "interval_hours": null, "prn": false, "at_night": false, "span": [0, 10]}]}
+{"text": "una vez al dia", "lang": "es", "expect": [{"per_day": "1", "interval_hours": null, "prn": false, "at_night": false, "span": [0, 14]}]}
+{"text": "at bedtime", "lang": "en", "expect": [{"per_day": "1", "interval_hours": null, "prn": false, "at_night": true, "span": [0, 10]}]}
+{"text": "por la noche", "lang": "es", "expect": [{"per_day": "1", "interval_hours": null, "prn": false, "at_night": true, "span": [0, 12]}]}
+{"text": "as needed", "lang": "en", "expect": [{"per_day": null, "interval_hours": null, "prn": true, "at_night": false, "span": [0, 9]}]}
+{"text": "si es necesario", "lang": "es", "expect": [{"per_day": null, "interval_hours": null, "prn": true, "at_night": false, "span": [0, 15]}]}
+{"text": "twice daily", "lang": "en", "expect": [{"per_day": "2", "interval_hours": null, "prn": false, "at_night": false, "span": [0, 11]}]}
+{"text": "dos veces al dia", "lang": "es", "expect": [{"per_day": "2", "interval_hours": null, "prn": false, "at_night": false, "span": [0, 16]}]}
+{"text": "no frequency mentioned", "lang": "en", "expect": []}

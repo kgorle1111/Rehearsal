@@ -1,0 +1,7 @@
+{"text": "I am not allergic to penicillin", "lang": "en", "targets": ["allergic"], "expect": [{"target": "allergic", "span": [9, 17], "polarity": "negated", "ambiguous": false}]}
+{"text": "No soy alérgico a la penicilina", "lang": "es", "targets": ["alérgico"], "expect": [{"target": "alérgico", "span": [7, 15], "polarity": "negated", "ambiguous": false}]}
+{"text": "I am allergic to penicillin", "lang": "en", "targets": ["allergic"], "expect": [{"target": "allergic", "span": [5, 13], "polarity": "affirmed", "ambiguous": false}]}
+{"text": "Soy alérgico a la penicilina", "lang": "es", "targets": ["alérgico"], "expect": [{"target": "alérgico", "span": [4, 12], "polarity": "affirmed", "ambiguous": false}]}
+{"text": "No sólo tome la medicina sino también descanse", "lang": "es", "targets": ["tome"], "expect": [{"target": "tome", "span": [8, 12], "polarity": "affirmed", "ambiguous": false}]}
+{"text": "He denies chest pain but has shortness of breath", "lang": "en", "targets": ["chest pain"], "expect": [{"target": "chest pain", "span": [10, 20], "polarity": "negated", "ambiguous": false}]}
+{"text": "No tiene dolor de pecho", "lang": "es", "targets": ["dolor"], "expect": [{"target": "dolor", "span": [9, 14], "polarity": "negated", "ambiguous": false}]}

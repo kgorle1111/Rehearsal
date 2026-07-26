@@ -1,0 +1,5 @@
+{"text": "Pain in the left knee", "lang": "en", "expect": [{"value": "left", "span": [12, 16], "anchor_span": [17, 21]}]}
+{"text": "Dolor en la rodilla izquierda", "lang": "es", "expect": [{"value": "left", "span": [20, 29], "anchor_span": [12, 19]}]}
+{"text": "Both shoulders hurt", "lang": "en", "expect": [{"value": "bilateral", "span": [0, 4], "anchor_span": [5, 14]}]}
+{"text": "Dolor en ambos hombros", "lang": "es", "expect": [{"value": "bilateral", "span": [9, 14], "anchor_span": [15, 22]}]}
+{"text": "I am right about this", "lang": "en", "expect": []}
