@@ -1,0 +1,71 @@
+# ─────────────────────────────────────────────────────────────
+# Rehearsal — .gitignore
+# ─────────────────────────────────────────────────────────────
+
+# ── Private planning material (never published) ──────────────
+# These are internal working documents, not part of the product.
+plans/
+*.private.md
+
+# ── Human-labeled calibration data & any recorded audio ──────
+# Ground-truth labels and session audio may contain identifiable
+# voice data. Never commit. See docs/12-security-privacy.md
+data/calibration/raw/
+data/sessions/
+data/audio/
+*.wav
+*.mp3
+*.m4a
+*.webm
+
+# ── Model artifacts & caches ─────────────────────────────────
+models/
+*.gguf
+*.safetensors
+.cache/
+.mlx_cache/
+hf_cache/
+
+# ── Eval outputs (regenerate, don't version blobs) ───────────
+evals/runs/
+evals/artifacts/
+*.eval.jsonl
+
+# ── Secrets ──────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets/
+
+# ── Python ───────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+dist/
+build/
+
+# ── Node / frontend ──────────────────────────────────────────
+node_modules/
+.next/
+.vite/
+frontend/dist/
+*.tsbuildinfo
+
+# ── OS / editor ──────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# ── Local scratch ────────────────────────────────────────────
+scratch/
+tmp/
+*.local.*
