@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from rehearsal.agents.clinician import WrongSpeakerError
+from rehearsal.agents.clinician import WrongSpeakerError as WrongSpeakerError
 from rehearsal.agents.model_client import ConversationNode, CounterpartTurn, LiveModelClient
 from rehearsal.contracts import ClinicalState, SpeakerRole
 
