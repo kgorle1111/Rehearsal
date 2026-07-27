@@ -1,0 +1,144 @@
+/* 10-frontend-spec.md §4 — the single source of visual truth. No literal colour, duration,
+   radius or spacing may appear outside this file. */
+:root {
+  color-scheme: light dark;
+
+  /* colour — 09-ui-ux.md §2.1 */
+  --color-primary: #0891b2;
+  --color-on-primary: #ffffff;
+  --color-secondary: #22d3ee;
+  --color-accent: #059669;
+  --color-background: #ecfeff;
+  --color-surface: #ffffff;
+  --color-foreground: #164e63;
+  --color-muted: #e8f1f6;
+  --color-muted-foreground: #64748b;
+  --color-border: #a5f3fc;
+  --color-destructive: #dc2626;
+  --color-warning: #d97706;
+  --color-ring: #0891b2;
+
+  --tint-critical: #fdecec;
+  --tint-non-critical: #fef4e6;
+  --tint-clean: #e8f7f1;
+
+  /* type family */
+  --font-heading: Figtree, system-ui, sans-serif;
+  --font-body: 'Noto Sans', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', monospace;
+
+  /* type scale */
+  --text-scale: 1;
+  --text-xs: calc(0.75rem * var(--text-scale));
+  --text-sm: calc(0.875rem * var(--text-scale));
+  --text-base: calc(1rem * var(--text-scale));
+  --text-lg: calc(1.125rem * var(--text-scale));
+  --text-xl: calc(1.25rem * var(--text-scale));
+  --text-2xl: calc(1.5rem * var(--text-scale));
+  --text-3xl: calc(2rem * var(--text-scale));
+  --text-4xl: calc(2.5rem * var(--text-scale));
+  --leading-body: 1.5;
+  --leading-heading: 1.25;
+  --measure-read: 70ch;
+  --measure-transcript: 55ch;
+  --numeric: tabular-nums;
+
+  /* spacing (8pt rhythm) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* radius */
+  --radius-control: 6px;
+  --radius-card: 10px;
+  --radius-modal: 16px;
+  --radius-pill: 9999px;
+
+  /* elevation */
+  --elev-flat: none;
+  --elev-card: 0 1px 3px rgba(22, 78, 99, 0.08);
+  --elev-overlay: 0 8px 24px rgba(22, 78, 99, 0.16);
+
+  /* motion */
+  --motion-micro: 150ms;
+  --motion-state: 200ms;
+  --motion-panel: 300ms;
+  --ease-enter: cubic-bezier(0, 0, 0.2, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --motion-exit-ratio: 0.7;
+
+  /* focus */
+  --focus-width: 2px;
+  --focus-offset: 2px;
+  --focus-color: var(--color-ring);
+
+  /* targets */
+  --target-min: 44px;
+  --target-gap: 8px;
+
+  /* layout */
+  --bp-sm: 768px;
+  --bp-md: 1024px;
+  --bp-lg: 1440px;
+  --sidebar-w: 248px;
+  --z-content: 0;
+  --z-sticky: 10;
+  --z-overlay: 100;
+  --z-modal: 200;
+  --z-toast: 300;
+}
+
+[data-theme='dark'] {
+  --color-primary: #22d3ee;
+  --color-on-primary: #083344;
+  --color-secondary: #67e8f9;
+  --color-accent: #34d399;
+  --color-background: #0b1418;
+  --color-surface: #132025;
+  --color-foreground: #e6f6fa;
+  --color-muted: #1b2c33;
+  --color-muted-foreground: #94a9b4;
+  --color-border: #25404a;
+  --color-destructive: #f87171;
+  --color-warning: #fbbf24;
+  --color-ring: #22d3ee;
+
+  --tint-critical: #2a1618;
+  --tint-non-critical: #2a2113;
+  --tint-clean: #12251e;
+
+  --elev-card: 0 1px 3px rgba(0, 0, 0, 0.45);
+  --elev-overlay: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+[data-contrast='high'] {
+  --color-foreground: #000000;
+  --color-border: #164e63;
+  --color-muted-foreground: #164e63;
+}
+
+[data-theme='dark'][data-contrast='high'] {
+  --color-foreground: #ffffff;
+  --color-border: #e6f6fa;
+  --color-muted-foreground: #e6f6fa;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-micro: 0ms;
+    --motion-state: 0ms;
+    --motion-panel: 0ms;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
