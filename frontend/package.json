@@ -11,7 +11,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@formatjs/intl-messageformat": "^10.5.14",
+    "intl-messageformat": "^10.5.14",
     "uplot": "^1.6.31"
   },
   "devDependencies": {

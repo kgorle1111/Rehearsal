@@ -18,6 +18,7 @@ import json
 import sys
 import uuid
 from pathlib import Path
+from typing import Any
 
 from rehearsal.agents.coach import CoachAgent
 from rehearsal.agents.model_client import ConversationNode
@@ -27,8 +28,9 @@ from rehearsal.contracts import Direction, ScoreRecord, Severity, SpeakerRole, T
 _SCENARIO_DIR = Path(__file__).resolve().parents[2] / "data" / "scenarios"
 
 
-def _load_raw(path: Path) -> dict:
-    return json.loads(path.read_text())
+def _load_raw(path: Path) -> dict[str, Any]:
+    data: dict[str, Any] = json.loads(path.read_text())
+    return data
 
 
 def cmd_review(args: argparse.Namespace) -> int:

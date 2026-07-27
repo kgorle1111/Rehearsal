@@ -74,7 +74,9 @@ class SqliteEventLog:
             hash=digest,
         )
 
-    def events_for(self, session_id: str, *, after: int = 0, limit: int | None = None) -> list[Event]:
+    def events_for(
+        self, session_id: str, *, after: int = 0, limit: int | None = None
+    ) -> list[Event]:
         sql = "SELECT * FROM events WHERE session_id = ? AND seq > ? ORDER BY seq"
         params: list[object] = [session_id, after]
         if limit is not None:

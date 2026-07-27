@@ -21,6 +21,7 @@ import json
 import os
 import sqlite3
 import time
+from typing import cast
 
 from fastapi import status
 
@@ -66,6 +67,27 @@ _TRIGGER_BY_ACTION = {
     "abort": "abort",
 }
 
+_DIFFICULTY_BAND_INDEX = {
+    "novice": 1,
+    "beginner": 2,
+    "intermediate": 3,
+    "advanced": 4,
+    "expert": 5,
+}
+
+
+def _difficulty_index(raw: dict[str, object]) -> int:
+    """`ScenarioRecord.difficulty` is a tag dict (misc/docs/07 §5), not a
+    scalar. The runtime/orchestrator plane wants an int 1..5
+    (misc/docs/03 §6.1's `difficulty:int`), so this derives one from the
+    scenario's `band` tag. Unrecognized/missing band defaults to 3
+    (mid-scale) rather than raising — a scenario missing this tag should
+    still be runnable."""
+    band = raw.get("band")
+    if isinstance(band, str) and band in _DIFFICULTY_BAND_INDEX:
+        return _DIFFICULTY_BAND_INDEX[band]
+    return 3
+
 
 def _allowed_triggers(state: SessionState) -> list[str]:
     triggers = {t.trigger for t in TRANSITIONS if t.from_state == state}
@@ -102,7 +124,7 @@ class SessionRuntime:
         ).fetchone()
         if row is None:
             raise not_found(f"session {session_id!r}", session_id=session_id)
-        return row
+        return cast(sqlite3.Row, row)
 
     def _fsm_for(self, session_id: str) -> SessionFSM:
         """Lazily rebuilt from the event log — works whether this session
@@ -165,7 +187,11 @@ class SessionRuntime:
         root_seed = req.root_seed if req.root_seed is not None else int.from_bytes(
             os.urandom(8), "big"
         )
-        difficulty = req.difficulty if req.difficulty is not None else scenario.difficulty
+        difficulty = (
+            req.difficulty
+            if req.difficulty is not None
+            else _difficulty_index(scenario.difficulty)
+        )
 
         fsm = SessionFSM(SessionState.INIT)
         fsm.apply("configure", guard_ok=True)
@@ -346,7 +372,7 @@ class SessionRuntime:
         return ScenarioDetail(
             scenario_id=record.scenario_id,
             schema_version=record.schema_version,
-            difficulty=record.difficulty,
+            difficulty=_difficulty_index(record.difficulty),
             condition=record.clinical_state.condition,
             review_status=record.review.status,
             clinical_state={
@@ -368,7 +394,7 @@ class SessionRuntime:
             ScenarioSummary(
                 scenario_id=r.scenario_id,
                 schema_version=r.schema_version,
-                difficulty=r.difficulty,
+                difficulty=_difficulty_index(r.difficulty),
                 condition=r.clinical_state.condition,
                 review_status=r.review.status,
             )

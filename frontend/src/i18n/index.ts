@@ -1,6 +1,6 @@
-// 10-frontend-spec.md §11 — ICU MessageFormat via @formatjs/intl-messageformat. UI language and
+// 10-frontend-spec.md §11 — ICU MessageFormat via intl-messageformat. UI language and
 // encounter languages are independent axes (§11.1): `locale` here is the UI locale only.
-import IntlMessageFormat from '@formatjs/intl-messageformat';
+import IntlMessageFormat from 'intl-messageformat';
 import { signal } from '../store/signal';
 import enUS from './catalog/en-US.json';
 import esMX from './catalog/es-MX.json';

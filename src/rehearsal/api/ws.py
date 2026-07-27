@@ -108,8 +108,9 @@ async def session_ws(websocket: WebSocket, session_id: str, runtime: SessionRunt
                     try:
                         runtime.transition(session_id, t, body)
                     except ApiError as exc:
+                        error_body = exc.body()["error"]
                         await websocket.send_text(
-                            _envelope("error", 0, None, int(time.time() * 1000), exc.body()["error"])
+                            _envelope("error", 0, None, int(time.time() * 1000), error_body)
                         )
                 # "ack" and "coach.dismiss" are transport-only; nothing to do
             except TimeoutError:
@@ -120,7 +121,8 @@ async def session_ws(websocket: WebSocket, session_id: str, runtime: SessionRunt
 
             new_events = runtime.events_since(session_id, after=last_sent)
             for e in new_events:
-                await websocket.send_text(_envelope(e.kind, e.seq, e.turn_index, e.ts_ms, e.payload))
+                envelope = _envelope(e.kind, e.seq, e.turn_index, e.ts_ms, e.payload)
+                await websocket.send_text(envelope)
                 last_sent = e.seq
     except WebSocketDisconnect:
         return
