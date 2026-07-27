@@ -1,0 +1,57 @@
+{
+  "sessionId": "sess-fixture-1",
+  "state": "debrief",
+  "degradeMax": 0,
+  "coverage": {
+    "turnsTotal": 2,
+    "turnsScoredFull": 2,
+    "turnsScoredExtractorOnly": 0,
+    "turnsUnscored": 0,
+    "unscoredTurnIndices": [],
+    "notAssessedCategories": []
+  },
+  "totals": { "critical": 1, "nonCritical": 0, "cleanTurns": 1 },
+  "turns": [
+    {
+      "index": 0,
+      "speaker": "clinician",
+      "direction": "en->es",
+      "source": { "text": "Take one tablet twice a day with food.", "lang": "en" },
+      "rendering": { "text": "Tome una pastilla al día con comida.", "lang": "es" },
+      "partial": false,
+      "audioSha": "abc123",
+      "verdict": {
+        "status": "complete",
+        "nCritical": 1,
+        "nNonCritical": 0,
+        "notAssessed": [],
+        "findings": [
+          {
+            "finding_id": 1,
+            "kind": "substitution",
+            "severity": "critical",
+            "origin": "extractor",
+            "src_start": 9,
+            "src_end": 20,
+            "span_start": 15,
+            "span_end": 21,
+            "confidence": 0.94,
+            "note": "\"twice a day\" was rendered as \"al día\" (once a day)."
+          }
+        ]
+      }
+    },
+    {
+      "index": 1,
+      "speaker": "patient",
+      "direction": "es->en",
+      "source": { "text": "Me duele la cabeza desde ayer.", "lang": "es" },
+      "rendering": { "text": "I've had a headache since yesterday.", "lang": "en" },
+      "partial": false,
+      "audioSha": "def456",
+      "verdict": { "status": "complete", "nCritical": 0, "nNonCritical": 0, "notAssessed": [], "findings": [] }
+    }
+  ],
+  "grader": { "model": "gpt-fixture", "promptVer": "v1" },
+  "confidence": { "measured": false, "kappa": null, "criticalRecall": null }
+}

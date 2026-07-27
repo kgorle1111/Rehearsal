@@ -32,6 +32,9 @@
   "encounter.connection.reconnecting": "Se perdió la conexión. La sesión sigue en curso — su audio se sigue grabando.",
   "encounter.connection.reconnectNow": "Reconectar ahora",
   "encounter.degrade.banner": "Ejecutando en modo reducido: {reason}",
+  "encounter.turn.label": "Turno {n}",
+
+  "stub.comingSoon": "Esta pantalla aún no está disponible.",
 
   "verdict.notScored": "Aún no evaluado",
   "verdict.clean": "Sin hallazgos en este turno",
@@ -61,10 +64,12 @@
   "report.coverage.unscored": "{n} aún no evaluados",
   "report.coverage.notAssessed": "No evaluado en esta sesión: {list}",
   "report.skills.title": "Desglose de competencias",
+  "report.skills.empty": "Aún no se han registrado hallazgos.",
   "report.skills.mode.radar": "Radar",
   "report.skills.mode.bars": "Barras",
   "report.skills.mode.table": "Tabla",
   "report.turns.title": "Turno por turno",
+  "report.turns.empty": "No hay turnos registrados.",
   "report.confidence.title": "Confianza y límites",
   "report.confidence.notMeasured": "Aún no se ha medido la concordancia del evaluador con el juicio de expertos humanos.",
   "report.confidence.measured": "Concordancia medida (κ): {kappa}. Sensibilidad para errores críticos: {recall}.",

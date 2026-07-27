@@ -32,6 +32,9 @@
   "encounter.connection.reconnecting": "Connection lost. The session is still running — your audio is still being recorded.",
   "encounter.connection.reconnectNow": "Reconnect now",
   "encounter.degrade.banner": "Running in a reduced mode: {reason}",
+  "encounter.turn.label": "Turn {n}",
+
+  "stub.comingSoon": "This screen is not built yet.",
 
   "verdict.notScored": "Not yet scored",
   "verdict.clean": "No findings this turn",
@@ -61,10 +64,12 @@
   "report.coverage.unscored": "{n} not yet scored",
   "report.coverage.notAssessed": "Not assessed this session: {list}",
   "report.skills.title": "Skill breakdown",
+  "report.skills.empty": "No findings recorded yet.",
   "report.skills.mode.radar": "Radar",
   "report.skills.mode.bars": "Bars",
   "report.skills.mode.table": "Table",
   "report.turns.title": "Turn by turn",
+  "report.turns.empty": "No turns recorded.",
   "report.confidence.title": "Confidence and limits",
   "report.confidence.notMeasured": "Grader agreement with human expert judgement has not been measured yet.",
   "report.confidence.measured": "Measured agreement (κ): {kappa}. Critical-error recall: {recall}.",

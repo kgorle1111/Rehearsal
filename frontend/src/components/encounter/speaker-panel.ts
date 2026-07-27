@@ -18,6 +18,8 @@ export class RehearsalSpeakerPanel extends HTMLElement {
   private _active = false;
   private _utterances: PanelUtterance[] = [];
   private heading = document.createElement('h2');
+  // role="log" on the wrapper, not the <ol> — see transcript.ts for why.
+  private logRegion = document.createElement('div');
   private list = document.createElement('ol');
 
   static get observedAttributes() {
@@ -28,9 +30,10 @@ export class RehearsalSpeakerPanel extends HTMLElement {
     this.className = 'rehearsal-speaker-panel';
     this.heading.className = 'rehearsal-speaker-panel__name';
     this.list.className = 'rehearsal-speaker-panel__transcript';
-    this.list.setAttribute('role', 'log');
+    this.logRegion.setAttribute('role', 'log');
+    this.logRegion.appendChild(this.list);
     this.appendChild(this.heading);
-    this.appendChild(this.list);
+    this.appendChild(this.logRegion);
     this.render();
   }
 

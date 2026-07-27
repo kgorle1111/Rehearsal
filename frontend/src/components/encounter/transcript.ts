@@ -10,12 +10,17 @@ export interface TranscriptItem {
 
 export class RehearsalTranscript extends HTMLElement {
   private _items: TranscriptItem[] = [];
+  // role="log" belongs on a plain container: ARIA's role-on-<ol> rules forbid it there (it would
+  // also strip the <ol>'s implicit "list" role, which axe-core's aria-allowed-role/listitem rules
+  // both flag). The log role wraps the list instead.
+  private logRegion = document.createElement('div');
   private list = document.createElement('ol');
 
   connectedCallback() {
-    this.list.setAttribute('role', 'log');
+    this.logRegion.setAttribute('role', 'log');
     this.list.className = 'rehearsal-transcript__list';
-    this.appendChild(this.list);
+    this.logRegion.appendChild(this.list);
+    this.appendChild(this.logRegion);
     this.render();
   }
 
