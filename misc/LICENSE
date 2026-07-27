@@ -1,0 +1,41 @@
+                                 Apache License
+                           Version 2.0, January 2004
+                        http://www.apache.org/licenses/
+
+Copyright 2026 Rehearsal contributors
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+--------------------------------------------------------------------------
+ACTION REQUIRED: replace this file with the canonical, complete Apache
+License 2.0 text from https://www.apache.org/licenses/LICENSE-2.0.txt
+before publishing the repository. The notice above states the licence and
+the copyright holder, but a published repository should carry the full
+licence text.
+--------------------------------------------------------------------------
+
+ADDITIONAL NOTICE — model weights and data
+
+This licence covers the source code and documentation in this repository.
+It does NOT cover:
+
+  * The weights of any third-party models the system loads at runtime.
+    Those are governed by their own licences and terms of use, which must
+    be reviewed independently before any distribution or commercial use.
+
+  * Any third-party corpus used to seed the scenario bank. Each corpus
+    carries its own licence and redistribution terms; see DATA_CARD.md.
+    Corpora are not redistributed with this repository.
+
+  * Human-labelled calibration data, session recordings, and any material
+    under data/ — none of which is published (see .gitignore).
