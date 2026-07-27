@@ -15,7 +15,14 @@ nine merge steps that the frozen contract can express:
   into this phase to provide one. This is the strict, safe collapse of S9-S12
   for a grader whose findings are structurally unanchored right now.
 - Span honesty: every finding kept by this function has a real span (or is an
-  omission, whose `source_span` stands in — schema note on `Finding`).
+  omission, whose `source_span` stands in — schema note on `Finding`). A
+  grader finding with NO span at all (neither source nor rendering) is
+  dropped outright: it can't be checked against the territory rule above
+  (an unlocated span can never be detected as overlapping an extractor's),
+  so keeping it would silently violate M4/M5 for exactly the findings that
+  most need it — a real grader (e.g. `hosts/ollama.py`) whose prompt
+  doesn't request offsets, rather than the fixture data every existing test
+  exercises.
 """
 
 from __future__ import annotations
@@ -48,6 +55,10 @@ def merge_findings(
     extractor_rendering_spans = [_as_tuple(f.rendering_span) for f in extractor_findings]
 
     for gf in grader_output.findings:
+        # Span honesty — an unlocated finding can't be territory-checked
+        # against the extractors, so it is dropped rather than trusted.
+        if gf.source_span is None and gf.rendering_span is None:
+            continue
         gf_span = _as_tuple(gf.rendering_span)
         # M4/M5 — territory check: extractor already adjudicated this span.
         if any(_spans_overlap(gf_span, es) for es in extractor_rendering_spans):

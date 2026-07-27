@@ -87,7 +87,12 @@ def _print_findings(score: ScoreRecord) -> None:
 
 def cmd_demo(args: argparse.Namespace) -> int:
     # Imported here so `rehearsal review` works without Ollama running.
-    from rehearsal.hosts.ollama import OllamaGraderClient, OllamaLiveClient, OllamaUnavailable
+    from rehearsal.hosts.ollama import (
+        OllamaGraderClient,
+        OllamaLiveClient,
+        OllamaUnavailable,
+        check_facts_present,
+    )
     from rehearsal.scenarios.bank import ScenarioBank, ScenarioNotApproved
     from rehearsal.scoring.engine import score_turn
 
@@ -128,6 +133,16 @@ def cmd_demo(args: argparse.Namespace) -> int:
                 print(f"\n{e}", file=sys.stderr)
                 return 1
             print(f'\n  PATIENT (es): "{turn_out.reply_text}"\n')
+            missing = check_facts_present(node, turn_out.reply_text)
+            if missing:
+                print(
+                    "  WARNING: this line may not be reliable scoring ground truth — "
+                    "the model's utterance appears to be missing: "
+                    + "; ".join(missing)
+                    + "\n  (see NOT-BUILT-YET.md P-extra: a live model's output isn't "
+                    "verified ground-truth-by-construction the way the scripted "
+                    "client's is.)\n"
+                )
             rendering = input("  Your English rendering > ").strip()
             if not rendering:
                 print("  (skipped)\n")

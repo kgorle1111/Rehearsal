@@ -26,4 +26,6 @@ Every number here is sourced in [`docs/01-research.md`](docs/01-research.md). Pu
 
 ## The one-liner
 
-*"Training hours — not experience — cut clinically dangerous interpreter errors from 12% to 2%. Training is scarce because certification-grade assessment needs two human raters per response. We built the tool that makes it unlimited — and we can prove our scoring agrees with human experts, because nobody else publishes that number."*
+*"Training hours — not experience — cut clinically dangerous interpreter errors from 12% to 2%. Training is scarce because certification-grade assessment needs two human raters per response. We built the tool that makes it unlimited — and we're built to publish exactly how our scoring agrees with human experts, because nobody else publishes that number."*
+
+**Status note (not for the pitch deck, for whoever pastes from this file):** the measurement harness that produces that agreement number exists and is tested end-to-end — see `src/rehearsal/evals/`. The number itself does not exist yet: it requires 40 hand-labelled calibration turns per `misc/SETUP.md` §6, and no one has labelled them. Every accuracy cell is `—` until that happens (`misc/plans/metrics-snapshot.md`). Don't paste a past-tense "we proved X" claim from this stat sheet — say "the tool is built to prove it" until the labels exist.

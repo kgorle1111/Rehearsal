@@ -14,20 +14,55 @@ from __future__ import annotations
 
 import json
 import urllib.error
+import urllib.parse
 import urllib.request
 from dataclasses import dataclass, field
 from typing import Any, Literal
 
-from rehearsal.agents.model_client import ConversationNode, CounterpartTurn, _render_fact
-from rehearsal.contracts import ClinicalState, ErrorType, Finding, Provenance, Severity, SpeakerRole
+from rehearsal.agents.isolation import assemble
+from rehearsal.agents.model_client import ConversationNode, CounterpartTurn, Fact, _render_fact
+from rehearsal.contracts import (
+    ClinicalState,
+    ErrorType,
+    Finding,
+    Provenance,
+    Severity,
+    Span,
+    SpeakerRole,
+)
 from rehearsal.scoring.grader import GraderOutput
 
 DEFAULT_MODEL = "gemma4:e4b-mlx"
 DEFAULT_HOST = "http://localhost:11434"
 
+_LOOPBACK_HOSTNAMES = {"localhost", "127.0.0.1", "::1"}
+
 
 class OllamaUnavailable(RuntimeError):
     """Ollama isn't reachable. Message says how to fix it."""
+
+
+class UnsafeHost(ValueError):
+    """`host` doesn't resolve to loopback.
+
+    Trainee speech (and, per misc/docs/12-security-privacy.md §6.2, sometimes
+    unprompted real clinical content the trainee narrates) goes into this
+    request in cleartext HTTP with no TLS and no allowlist. A remote host —
+    a shared team default, a copy-pasted config, "let's use my GPU box" —
+    would exfiltrate it. This is the T2/B4 threat misc/docs/03's "no cloud
+    inference in the core loop" rule exists to prevent; this check is what
+    actually enforces it for the one real model-call path in this build.
+    """
+
+
+def _ensure_loopback(host: str) -> None:
+    hostname = urllib.parse.urlparse(host).hostname
+    if hostname not in _LOOPBACK_HOSTNAMES:
+        raise UnsafeHost(
+            f"host={host!r} is not loopback (hostname={hostname!r}). Trainee "
+            f"speech would leave this machine in cleartext. Use "
+            f"http://localhost:<port> or http://127.0.0.1:<port>."
+        )
 
 
 def _chat(
@@ -39,6 +74,7 @@ def _chat(
     temperature: float = 0.7,
     timeout: float = 120.0,
 ) -> str:
+    _ensure_loopback(host)
     payload: dict[str, Any] = {
         "model": model,
         "messages": messages,
@@ -63,11 +99,60 @@ def _chat(
     return str(body["message"]["content"]).strip()
 
 
+_INSTRUCTION = (
+    "Say one conversational utterance that conveys EXACTLY these facts — "
+    "all of them, and nothing clinical beyond them. Reply with the "
+    "utterance only, no quotes, no preamble."
+)
+
+
+def _fact_keywords(fact: Fact) -> tuple[str, ...]:
+    """A few distinctive words from a rendered fact, for the presence check
+    below. Cheap and approximate on purpose — this is a sanity flag, not a
+    replacement for real ground-truth-by-construction (see
+    `check_facts_present`'s docstring)."""
+    rendered = _render_fact(fact)
+    words = [w.strip(".,").lower() for w in rendered.split()]
+    return tuple(w for w in words if len(w) >= 5)
+
+
+def check_facts_present(node: ConversationNode, reply_text: str) -> tuple[str, ...]:
+    """Flags facts whose distinctive keywords don't appear anywhere in the
+    model's reply. Returns the missing facts' rendered text.
+
+    This does NOT make `reply_text` ground-truth-by-construction the way
+    `ScriptedModelClient`'s output is — a live model can still paraphrase a
+    dose or drop a qualifier in a way that keeps every keyword present while
+    changing the clinical meaning. It only catches the coarse failure (a
+    fact dropped or substituted for an unrelated one entirely). See
+    NOT-BUILT-YET.md P-extra for the honest limitation.
+    """
+    lowered = reply_text.lower()
+    missing: list[str] = []
+    for fact in node.facts:
+        keywords = _fact_keywords(fact)
+        if keywords and not any(kw in lowered for kw in keywords):
+            missing.append(_render_fact(fact))
+    return tuple(missing)
+
+
 @dataclass(frozen=True, slots=True)
 class OllamaLiveClient:
-    """Counterpart turns via a local Gemma. Information isolation holds by
-    construction: the prompt contains only persona surface + the node's
-    facts — no rubric, no manifest, no learner model (misc/docs/04 §6)."""
+    """Counterpart turns via a local Gemma.
+
+    The prompt is built through `agents.isolation.assemble()` — the same
+    single chokepoint every other context construction in this codebase
+    goes through — so the allowlist and rubric-vocabulary canary apply here
+    too, rather than this being the one hand-formatted-string exception to
+    misc/docs/04 §5's enforcement point.
+
+    Ground truth is NOT verified by construction here the way it is for
+    `ScriptedModelClient` (see `check_facts_present` and NOT-BUILT-YET.md
+    P-extra) — the model is asked to convey exactly these facts, but nothing
+    stops it from paraphrasing one away. `cli.py`'s demo loop calls
+    `check_facts_present` and surfaces a visible warning when it fires,
+    rather than silently trusting the output as scoring ground truth.
+    """
 
     model: str = DEFAULT_MODEL
     host: str = DEFAULT_HOST
@@ -88,13 +173,11 @@ class OllamaLiveClient:
                 "Speak ONLY English, addressing the patient directly, briefly (1-3 sentences), "
                 "in plain professional language."
             )
-        prompt = (
-            f"{persona}\n\n"
-            "Say one conversational utterance that conveys EXACTLY these facts — "
-            "all of them, and nothing clinical beyond them:\n"
-            f"{facts}\n\n"
-            "Reply with the utterance only, no quotes, no preamble."
+        isolation_role: Literal["clinician", "patient"] = (
+            "patient" if role is SpeakerRole.PATIENT else "clinician"
         )
+        ctx = assemble(isolation_role, {"role_card": persona, "node": facts})
+        prompt = f"{ctx.text}\n\n{_INSTRUCTION}"
         text = _chat(self.host, self.model, [{"role": "user", "content": prompt}])
         return CounterpartTurn(reply_text=text, heard_verbatim="")
 
@@ -118,6 +201,22 @@ def _extract_json(raw: str) -> Any:
         except json.JSONDecodeError:
             start = raw.find("{", start + 1)
     raise json.JSONDecodeError("no parseable object", raw, 0)
+
+
+def _quote_to_span(text: str, quote: object) -> Span | None:
+    """Deterministic: the model supplies a quote, code computes the offset
+    by exact substring search. Offsets are never taken from the model
+    directly — the model isn't asked for indices, and if it were, trusting
+    them would be a Golden Rule 1 violation (a model deciding something
+    code can check). A quote that isn't found verbatim (paraphrased,
+    empty, missing) yields None, and merge.py drops spanless grader
+    findings outright rather than keeping an unlocated one."""
+    if not isinstance(quote, str) or not quote:
+        return None
+    idx = text.find(quote)
+    if idx == -1:
+        return None
+    return Span(start=idx, end=idx + len(quote))
 
 
 @dataclass(frozen=True, slots=True)
@@ -149,9 +248,13 @@ class OllamaGraderClient:
             "false_fluency, first_person_violation.\n\n"
             f"The {speaker} said ({src_lang} source):\n{source}\n\n"
             f"Trainee rendering ({ren_lang}):\n{rendering}\n\n"
+            "For each finding, quote the EXACT substring of the rendering that is "
+            "the problem (copy it verbatim, do not paraphrase) — this locates the "
+            "finding; offsets are computed from your quote, not asked of you.\n\n"
             "Respond with JSON only:\n"
             '{"clean": true|false, "findings": [{"type": "<one of the nine types>", '
             '"severity": "critical"|"non_critical", "note": "<one line>", '
+            '"rendering_quote": "<exact verbatim substring of the rendering>", '
             '"confidence": 0.0-1.0}]}\n'
             'If the rendering is faithful, return {"clean": true, "findings": []}.'
         )
@@ -170,6 +273,7 @@ class OllamaGraderClient:
                     severity=Severity(f.get("severity", "non_critical")),
                     note=str(f.get("note", ""))[:200],
                     provenance=Provenance.GRADER,
+                    rendering_span=_quote_to_span(rendering, f.get("rendering_quote")),
                     confidence=max(0.0, min(1.0, float(f.get("confidence", 0.5)))),
                 )
                 for f in data.get("findings", [])

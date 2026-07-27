@@ -31,7 +31,14 @@ def connect(path: Path | str) -> sqlite3.Connection:
     re-running the whole thing is a no-op (DoD: "migrations run clean").
     """
     path = Path(path)
+    # misc/docs/12-security-privacy.md §3 T1: the store directory is 0700 —
+    # this is what stops a second account on the same unlocked machine from
+    # reading rehearsal.db, independent of whole-disk encryption (which
+    # protects at rest, not from another logged-in user). mkdir's `mode` is
+    # affected by umask and isn't reapplied if the dir already existed, so
+    # chmod explicitly rather than trust the mkdir call alone.
     path.parent.mkdir(parents=True, exist_ok=True)
+    path.parent.chmod(0o700)
     conn = sqlite3.connect(path, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     apply_migrations(conn)

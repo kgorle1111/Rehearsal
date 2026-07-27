@@ -46,11 +46,18 @@ class BlobRef:
 class BlobStore:
     def __init__(self, root: Path | str) -> None:
         self.root = Path(root)
-        (self.root / "sha256").mkdir(parents=True, exist_ok=True)
+        # misc/docs/12-security-privacy.md §3 T1: 0700 dirs / 0600 blobs.
+        # Recorded audio may contain trainee speech; permissions are the
+        # control that matters on a shared, unlocked machine (FDE only
+        # protects data at rest, not from another logged-in account).
+        sha_root = self.root / "sha256"
+        sha_root.mkdir(parents=True, exist_ok=True)
+        sha_root.chmod(0o700)
 
     def _path(self, sha256: str, ext: str) -> Path:
         shard = self.root / "sha256" / sha256[0:2] / sha256[2:4]
         shard.mkdir(parents=True, exist_ok=True)
+        shard.chmod(0o700)
         return shard / f"{sha256}.{ext}"
 
     def _find_existing(self, sha256: str) -> Path | None:
@@ -71,6 +78,7 @@ class BlobStore:
         else:
             tmp = path.with_suffix(path.suffix + ".tmp")
             tmp.write_bytes(data)
+            tmp.chmod(0o600)
             tmp.replace(path)  # atomic on the same filesystem
         return BlobRef(sha256=sha256, bytes_len=len(data), media_type=media_type)
 
