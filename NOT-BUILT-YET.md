@@ -31,4 +31,21 @@ Nothing deferred.
 
 ## P3 — Surface (WS-API, WS8 frontend, WS-TEST)
 
-_(fill in as P3 lands)_
+- **Frontend is UI-shell only, not wired to a live backend.** `main.ts` only routes `#/encounter` against a fresh empty `SessionStore` — no WebSocket session actually runs end-to-end through the browser yet. `#/report` isn't routed; report rendering is exercised directly by tests (`mountReportView(container, report)`), not through real navigation.
+- **6 of the ~8 planned views are landmark-correct empty stubs** (`stub-view.ts`): scenario-picker, preflight, progress, library, review, settings. Only encounter and report are built full-depth.
+- **`components/progress/**` and `components/review/**` are empty**, unwired to any route.
+- **Charts are hand-written inline SVG, not `uplot`** (a declared dependency) — jsdom has no `<canvas>` 2D context and this repo doesn't install the native `canvas` package, so a canvas-based chart would fail under the mandated jsdom test environment. Revisit if/when tests move to a real browser environment.
+- **No error-span highlighting in the turn-by-turn diff.** `mark.span` CSS classes exist in `base.css`, unused — the report view shows findings as a list, not inline-marked in the source/rendering text.
+- **Settings view isn't wired to `store/settings.ts`'s theme/locale toggles** — lowest priority, nothing depends on it yet.
+- **No SQLite migrations tooling, no `rehearsal doctor`.** WS-API built the event store, blob store, and projections directly; a formal migration runner wasn't in scope.
+
+## P-extra — out-of-scope work that landed without going through the workstream process
+
+Commit `536fbcb` ("Add Ollama model host and text-mode demo CLI") landed autonomously during a session interruption, was never dispatched as a workstream, and wasn't gate-checked by the orchestrator before this note. Per the user's decision (2026-07-27), it's being left in place for now and will get scrutiny at the P5 review gate rather than being reverted or fixed ad hoc. Known facts about it, not yet verified:
+
+- Adds `src/rehearsal/hosts/ollama.py` — a real live-model client wired to Ollama, contradicting every P1/P2 workstream's explicit "no real model host exists yet" scoping.
+- Adds `rehearsal review` (scenario approval front door) and `rehearsal demo` (text-mode end-to-end session) CLI commands.
+- Adds `ROADMAP.md`.
+- Touches `src/rehearsal/cli.py`, which BUILD.md §3.1 assigns to WS4 — nobody on WS4 wrote this.
+- Not yet checked against BUILD.md §1 golden rules (e.g. does the Ollama client's output reach a `critical` finding or a stored score without a deterministic check in front of it? Is there a human gate anywhere in the `rehearsal demo` path?).
+- Not yet lint/type/test verified in isolation the way every other workstream's commit was.
