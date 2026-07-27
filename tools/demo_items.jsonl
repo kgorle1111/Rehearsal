@@ -1,0 +1,5 @@
+{"id": "demo-01", "direction": "es_to_en", "fact_en": "Take one tablet twice a day with food.", "rendering_text": "Take one tablet once a day with food."}
+{"id": "demo-02", "direction": "es_to_en", "fact_en": "You should not take this medication if you are allergic to penicillin.", "rendering_text": "You should not take this medication if you are allergic to penicillin."}
+{"id": "demo-03", "direction": "es_to_en", "fact_en": "The pain started three days ago and is on your left side.", "rendering_text": "The pain started three days ago and is on your right side."}
+{"id": "demo-04", "direction": "en_to_es", "source_text": "Take one tablet twice a day with food.", "rendering_text": "Tome una pastilla al día con comida."}
+{"id": "demo-05", "direction": "en_to_es", "source_text": "Do not take this medication with alcohol.", "rendering_text": "No tome este medicamento con alcohol."}
