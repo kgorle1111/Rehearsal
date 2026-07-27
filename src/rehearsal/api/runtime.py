@@ -21,6 +21,7 @@ import json
 import os
 import sqlite3
 import time
+from dataclasses import replace
 from typing import cast
 
 from fastapi import status
@@ -143,7 +144,13 @@ class SessionRuntime:
     def _sync_projection(self, session_id: str, *, abort_reason: str | None = None) -> SessionFSM:
         fsm = self._fsm_for(session_id)
         row = self._row(session_id)
-        view = fold(self._events.events_for(session_id))
+        # Same reasoning as get_session: fold()'s view.state only tracks
+        # durable checkpoints, so it silently disagrees with the live FSM on
+        # every non-durable state (source_speaking, rendering_capturing,
+        # recovering). Without this, sessions.state (and therefore
+        # GET /api/sessions?state=... filtering) could never reflect that a
+        # session is actually mid-turn.
+        view = replace(fold(self._events.events_for(session_id)), state=fsm.state)
         started_ms = row["started_ms"]
         if started_ms is None and fsm.state not in (SessionState.INIT, SessionState.CONFIGURING):
             started_ms = int(time.time() * 1000)
@@ -184,8 +191,14 @@ class SessionRuntime:
             )
 
         session_id = new_ulid()
-        root_seed = req.root_seed if req.root_seed is not None else int.from_bytes(
-            os.urandom(8), "big"
+        root_seed = (
+            req.root_seed
+            if req.root_seed is not None
+            # `sessions.root_seed` is a SQLite STRICT INTEGER column (signed
+            # 64-bit, max 2**63-1); an 8-byte unsigned draw overflows it on
+            # ~50% of draws (OverflowError on every upsert_session call for
+            # any seed >= 2**63). Mask off the sign bit to stay in range.
+            else int.from_bytes(os.urandom(8), "big") & 0x7FFF_FFFF_FFFF_FFFF
         )
         difficulty = (
             req.difficulty
@@ -274,12 +287,23 @@ class SessionRuntime:
         if not events:
             raise not_found(f"session {session_id!r}", session_id=session_id)
         view = fold(events)
+        # `fold()` reconstructs the last DURABLE checkpoint — the crash-resume
+        # question ("where would resume land"), not "what is happening right
+        # now". Non-durable states (source_speaking, rendering_capturing,
+        # recovering) never appear in its output by design (§8.1), so using
+        # it here would report a session as "armed" moments after it was
+        # correctly started into "source_speaking". `_fsm_for` holds the
+        # live, in-process FSM when one exists, and falls back to the same
+        # fold()-derived state honestly when it doesn't (e.g. after a
+        # process restart, before anything repopulates the cache) — so it is
+        # never less accurate than `view.state`, only sometimes more so.
+        state = self._fsm_for(session_id).state
         row = self._conn.execute(
             "SELECT * FROM sessions WHERE session_id = ?", (session_id,)
         ).fetchone()
         return SessionViewOut(
             session_id=session_id,
-            state=view.state.value,
+            state=state.value,
             trainee_id=row["trainee_id"] if row else None,
             scenario_id=row["scenario_id"] if row else None,
             root_seed=view.root_seed,
