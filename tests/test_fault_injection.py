@@ -7,16 +7,15 @@ is not duplicated here.
 
 This file covers a genuine gap found while auditing the other workstreams'
 failure paths per `misc/docs/14-testing-strategy.md` §11 (the fault
-catalogue) and BUILD.md's WS-TEST brief: WS1's `score_turn()` has a
+catalogue) and BUILD.md's WS-TEST brief: WS1's `score_turn()` had a
 documented failure mode (a grader call fails) with no test proving the
-documented behaviour actually happens.
+documented behaviour actually happened — it didn't, until the orchestrator
+fixed `run_grader()` during the P3 gate (see the test below).
 """
 
 from __future__ import annotations
 
 from typing import Literal
-
-import pytest
 
 from rehearsal.contracts import Direction, ScoreStatus, TurnRecord
 from rehearsal.scoring.engine import score_turn
@@ -47,35 +46,17 @@ def _turn() -> TurnRecord:
         direction=Direction.EN_TO_ES,
         source_utterance="Take 500 mg once daily.",
         source_lang="en",
-        rendering_transcript="Tome 500 miligramos una vez al dia.",
+        rendering_transcript="Tome 250 miligramos una vez al dia.",
     )
 
 
-@pytest.mark.xfail(
-    reason=(
-        "BUG (not fixed here — WS1 owns src/rehearsal/scoring/engine.py, "
-        "outside this workstream's ownership per BUILD.md §1 rule 8): "
-        "engine.py's own module docstring says a grader client's absence "
-        "'degrades the status rather than raising' (engine.py:26-29), and "
-        "run_grader()'s docstring says the same for an unavailable grader "
-        "(grader.py:69-70). But score_turn() calls "
-        "`run_grader(grader_client, ...)` with no try/except around the "
-        "client.grade() call inside run_grader() — a grader client that "
-        "raises (fault F-01/F-02/F-04/F-06 in "
-        "misc/docs/14-testing-strategy.md §11.1: malformed JSON, wrong "
-        "shape, truncated response, socket death) propagates the raw "
-        "exception out of score_turn() and crashes the whole turn instead "
-        "of degrading to ScoreStatus.EXTRACTOR_ONLY with the extractor "
-        "findings preserved. Reported to WS1; not fixed here."
-    ),
-    strict=True,
-)
 def test_grader_client_exception_degrades_instead_of_crashing_the_turn() -> None:
+    """Was xfail (BUG, reported to WS1 — run_grader() had no try/except
+    around client.grade()); fixed in src/rehearsal/scoring/grader.py by the
+    orchestrator during the P3 gate. A failing grader now degrades the turn
+    to extractor-only instead of crashing it, as engine.py's own docstring
+    always promised."""
     turn = _turn()
-    # This is what the documented contract promises: a failing grader
-    # degrades the turn to extractor-only, it does not raise out of
-    # score_turn(). Today it raises — this assertion never runs because
-    # the ValueError propagates first, which is exactly the bug.
     record = score_turn(turn, _RaisingGraderClient())
     assert record.status == ScoreStatus.EXTRACTOR_ONLY
     assert record.extractor_findings  # dosage substitution still caught deterministically

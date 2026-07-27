@@ -67,10 +67,20 @@ def run_grader(
     speaker: Literal["clinician", "patient"],
 ) -> GraderOutput | None:
     """None means 'grader unavailable' — the caller (engine.py) must treat that
-    as `status = grader_unavailable` and keep the symbolic findings (§5.6)."""
+    as `status = grader_unavailable` and keep the symbolic findings (§5.6).
+
+    A raising client (malformed response, dead socket, any host-side fault —
+    docs/14-testing-strategy.md fault classes F-01/F-02/F-04/F-06) degrades
+    the same way as a missing client. A model failing is never allowed to
+    crash the turn; the extractor findings must still land."""
     if client is None:
         return None
-    return client.grade(source=source, rendering=rendering, direction=direction, speaker=speaker)
+    try:
+        return client.grade(
+            source=source, rendering=rendering, direction=direction, speaker=speaker
+        )
+    except Exception:
+        return None
 
 
 __all__ = ["GraderOutput", "GraderClient", "StubGraderClient", "run_grader"]
