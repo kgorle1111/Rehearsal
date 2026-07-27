@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# No telemetry / analytics egress: only setup-uv, setup-node, and checkout run,
+# all pulling from GitHub/PyPI/npm registries needed to install declared deps.
+# No third-party reporting action is used anywhere in this file.
+
+jobs:
+  # Backend stages run in one job, sequentially, cheapest signal first:
+  # lint (fastest) -> types -> test (includes the no-egress static check,
+  # since it's a real pytest file at tests/test_no_network_egress.py, not a
+  # separate step) -> evals. Keeping them in one job avoids repeating the
+  # `uv sync` setup cost four times for stages that all run on every push
+  # anyway per misc/docs/13-deployment-ops.md §6.
+  backend:
+    name: lint, types, test, evals
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: uv sync --all-extras
+
+      - name: lint
+        run: uv run ruff check .
+
+      - name: types
+        run: uv run mypy .
+
+      - name: test (includes no-network-egress static check)
+        run: uv run pytest
+
+      - name: evals
+        run: make evals
+
+  # Frontend needs a Node setup step, so it's more expensive to start than
+  # any backend stage even though it's conceptually independent of them.
+  # Gated on `backend` passing first: cheap, fast Python checks fail fast
+  # before paying for npm ci.
+  frontend:
+    name: frontend (typecheck, test, a11y)
+    needs: backend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: typecheck
+        run: npm run typecheck
+
+      - name: test
+        run: npm test
