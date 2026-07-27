@@ -18,6 +18,7 @@ dev = [
 
 [project.scripts]
 rehearsal = "rehearsal.cli:main"
+rehearsal-evals = "rehearsal.evals.cli:main"
 
 [build-system]
 requires = ["hatchling"]
