@@ -39,6 +39,14 @@ Nothing deferred.
 - **Settings view isn't wired to `store/settings.ts`'s theme/locale toggles** — lowest priority, nothing depends on it yet.
 - **No SQLite migrations tooling, no `rehearsal doctor`.** WS-API built the event store, blob store, and projections directly; a formal migration runner wasn't in scope.
 
+## P4 — Measurement (WS9 evals, WS6 prompt-opt, WS-OPS CI)
+
+- **EV-01 (κ), EV-02 (critical_recall), EV-03 (human ceiling) are BLOCKED-ON-HUMAN.** `data/calibration/dev.jsonl`, `test.jsonl`, `relabel.jsonl`, `rater2.jsonl` don't exist — only unlabelled `items.jsonl`. Every accuracy number in the project is downstream of this. Unblocks via `misc/SETUP.md` §6 (a human labels 40 items) — see `data/calibration/README.md` and `tools/label_quiz*.py`, already built.
+- **The prompt-optimisation loop has never run a real search.** WS6 built and proved the engineering (floor enforcement, regression rejection, no-TEST-leakage, honest 4-cell reporting) against synthetic candidates. There is no real `GraderProgram` search against real DEV data, because there's no real DEV data and no live grader model.
+- **The eval registry has never recorded a real (non-fixture) run.** SQLite append-only mechanism is proven correct; `data/evals/registry.db` doesn't persist any committed run yet.
+- **CI covers 6 of the 12 documented stages** (lint, types, test, frontend, evals-on-fixtures, a static no-egress check). Not built: `migrations` (no migration runner exists), `integration` (no dedicated stub-host session-flow test dir), `package`/`offline-install`/`smoke` (no wheel, no bundle, no `rehearsal doctor`/`replay --verify`), `evals-full` (no reference hardware, no model weights). None of these are faked — CI simply doesn't claim to run them.
+- **`.gitignore` doesn't cover `data/evals/registry.db`/`data/evals/runs/`.** A real eval run leaves `data/evals/` untracked-but-visible in `git status`. Noticed by WS9, not fixed (outside its ownership) — small gap, fix when someone runs a real eval locally and notices the clutter.
+
 ## P-extra — out-of-scope work that landed without going through the workstream process
 
 Commit `536fbcb` ("Add Ollama model host and text-mode demo CLI") landed autonomously during a session interruption, was never dispatched as a workstream, and wasn't gate-checked by the orchestrator before this note. Per the user's decision (2026-07-27), it's being left in place for now and will get scrutiny at the P5 review gate rather than being reverted or fixed ad hoc. Known facts about it, not yet verified:
