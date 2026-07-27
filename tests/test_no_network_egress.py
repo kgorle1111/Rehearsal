@@ -3,8 +3,13 @@
 The offline promise (§10 of the same doc) has no real "run in a
 network-isolated container" test yet (stage 10, `offline-install`, is not
 built — no bundle exists to install). This is the cheap static substitute:
-grep the four packages that make up the deterministic core loop for
-network-call patterns and fail if any show up.
+grep the packages that make up the deterministic core loop for
+network-call patterns and fail if any show up. `api`/`store` were added by
+the WS-API contract-test pass (see NOT-BUILT-YET.md P5) to close the "no
+network egress in the core loop (boundary test)" item in that workstream's
+DoD — the API layer proxies requests to `SessionRuntime`/the SQLite store
+and must stay just as offline-safe as the scoring/orchestrator core it
+wraps.
 
 `src/rehearsal/hosts/` is excluded on purpose, not by oversight.
 `hosts/ollama.py` (commit 536fbcb, see NOT-BUILT-YET.md P-extra) is a real
@@ -21,7 +26,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-CORE_PACKAGES = ["scoring", "runtime", "orchestrator", "agents"]
+CORE_PACKAGES = ["scoring", "runtime", "orchestrator", "agents", "api", "store"]
 
 NETWORK_PATTERNS = [
     r"\brequests\.",
