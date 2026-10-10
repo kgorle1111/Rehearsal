@@ -1,5 +1,20 @@
 # Rehearsal
 
+> **Status: archived (October 2026). Text-mode prototype, no longer maintained.**
+>
+> **What works:** a text-mode scoring pipeline for interpreter renditions. Rule-based checks for dosages, laterality, allergies (including allergic / not-allergic polarity) and frequency catch planted errors. 288 tests pass, with strict mypy and ruff clean.
+>
+> **Not built:** voice. There is no speech-to-text, audio I/O, VAD or TTS; the system is text-only. Clinician and patient agents run on scripted templates or a local Ollama model. See [`NOT-BUILT-YET.md`](NOT-BUILT-YET.md).
+>
+> **Known limits:**
+> - The negation and number extractors exist but aren't wired into scoring, so a dropped "no" or "not" isn't flagged.
+> - Compound spelled-out numbers aren't parsed ("twenty-five" reads as 20 and 5; "two hundred" as 2).
+> - The evals EV-01 to EV-03 are blocked until a human labels a calibration set.
+>
+> The description below is the original design; much of it (voice loop, real-time latency, calibrated scores) was never built.
+>
+> **Setup:** [`misc/SETUP.md`](misc/SETUP.md) §2 installs it; then `make test` (or `uv run pytest`). Most other `make` targets named in SETUP.md (`models`, `scenarios`, `dev`, `session`, `calibrate`) don't exist in the Makefile. **License:** MIT, see [`LICENSE`](LICENSE).
+
 **A local, voice-based training and assessment system for medical interpreters and bilingual community health workers.**
 
 A trainee stands in the middle of a simulated clinical encounter. An AI clinician speaks English. An AI patient speaks Spanish. The trainee interprets aloud between them, exactly as they would in a real triadic encounter. Afterwards, the system shows what meaning survived each interpretation and what did not — omissions, additions, substitutions, distortions — scored against an error taxonomy drawn from the interpreting research literature and aligned to the NCIHC Standards of Practice, with the clinically dangerous errors checked deterministically rather than judged.
@@ -43,29 +58,29 @@ Full evidence, with sources, dates and honestly-stated gaps: [`docs/01-research.
 
 | Document | Contents |
 |---|---|
-| [`SETUP.md`](SETUP.md) | Everything needed to run the system — prerequisites, models, data, and **the calibration protocol (§6)** that anchors every number the project reports |
-| [`docs/00-dossier.md`](docs/00-dossier.md) | The product: problem, users, thesis, scope, and what it deliberately is not |
+| [`misc/SETUP.md`](misc/SETUP.md) | Everything needed to run the system — prerequisites, models, data, and **the calibration protocol (§6)** that anchors every number the project reports |
+| [`misc/docs/00-dossier.md`](misc/docs/00-dossier.md) | The product: problem, users, thesis, scope, and what it deliberately is not |
 | [`docs/01-research.md`](docs/01-research.md) | Evidence base — clinical literature, professional standards, local context, prior art, and named gaps |
-| [`docs/02-layer-vertical.md`](docs/02-layer-vertical.md) | The capability vertical: what is built at each layer and the eval that proves it was earned |
-| [`docs/03-system-architecture.md`](docs/03-system-architecture.md) | End-to-end architecture, components, trust boundaries, session state machine |
-| [`docs/04-ai-engineering.md`](docs/04-ai-engineering.md) | Agent roster, information isolation, context discipline, prompt optimisation |
-| [`docs/05-voice-pipeline.md`](docs/05-voice-pipeline.md) | Real-time audio: latency budget, barge-in, turn-taking, memory layout, degradation ladder |
-| [`docs/06-scoring-engine.md`](docs/06-scoring-engine.md) | The fidelity scorer — symbolic extractors, semantic pass, merge logic, worked examples |
-| [`docs/07-data-and-scenarios.md`](docs/07-data-and-scenarios.md) | Clinical state graph, scenario bank, corpus requirements, retention |
-| [`docs/08-evals.md`](docs/08-evals.md) | The measurement system — every metric, gate, and what the evals cannot tell you |
-| [`docs/09-ui-ux.md`](docs/09-ui-ux.md) | Complete interface and experience design |
-| [`docs/10-frontend-spec.md`](docs/10-frontend-spec.md) | Frontend implementation contract, design tokens, accessibility |
-| [`docs/11-backend-api.md`](docs/11-backend-api.md) | API surface, real-time protocol, data model |
-| [`docs/12-security-privacy.md`](docs/12-security-privacy.md) | Threat model, data inventory, responsible-use position |
-| [`docs/13-deployment-ops.md`](docs/13-deployment-ops.md) | Packaging, release gates, observability without telemetry, runbooks |
-| [`docs/14-testing-strategy.md`](docs/14-testing-strategy.md) | Software correctness — distinct from model quality in `08-evals.md` |
-| [`docs/15-workstreams.md`](docs/15-workstreams.md) | Parallel workstreams, file ownership, frozen interface contracts |
-| [`docs/16-roadmap.md`](docs/16-roadmap.md) | Stages defined by evidence and dependency |
-| [`docs/17-decisions.md`](docs/17-decisions.md) | Decision record — every consequential choice and its price |
-| [`docs/18-glossary.md`](docs/18-glossary.md) | Interpreting, clinical and system vocabulary |
-| [`MODEL_CARD.md`](MODEL_CARD.md) | Models used, intended use, prohibited use, limitations, bias |
-| [`DATA_CARD.md`](DATA_CARD.md) | Every data asset: provenance, sensitivity, retention |
-| [`CONTRIBUTING.md`](CONTRIBUTING.md) · [`SECURITY.md`](SECURITY.md) · [`CHANGELOG.md`](CHANGELOG.md) | Contribution, disclosure, release discipline |
+| [`misc/docs/02-layer-vertical.md`](misc/docs/02-layer-vertical.md) | The capability vertical: what is built at each layer and the eval that proves it was earned |
+| [`misc/docs/03-system-architecture.md`](misc/docs/03-system-architecture.md) | End-to-end architecture, components, trust boundaries, session state machine |
+| [`misc/docs/04-ai-engineering.md`](misc/docs/04-ai-engineering.md) | Agent roster, information isolation, context discipline, prompt optimisation |
+| [`misc/docs/05-voice-pipeline.md`](misc/docs/05-voice-pipeline.md) | Real-time audio: latency budget, barge-in, turn-taking, memory layout, degradation ladder |
+| [`misc/docs/06-scoring-engine.md`](misc/docs/06-scoring-engine.md) | The fidelity scorer — symbolic extractors, semantic pass, merge logic, worked examples |
+| [`misc/docs/07-data-and-scenarios.md`](misc/docs/07-data-and-scenarios.md) | Clinical state graph, scenario bank, corpus requirements, retention |
+| [`misc/docs/08-evals.md`](misc/docs/08-evals.md) | The measurement system — every metric, gate, and what the evals cannot tell you |
+| [`misc/docs/09-ui-ux.md`](misc/docs/09-ui-ux.md) | Complete interface and experience design |
+| [`misc/docs/10-frontend-spec.md`](misc/docs/10-frontend-spec.md) | Frontend implementation contract, design tokens, accessibility |
+| [`misc/docs/11-backend-api.md`](misc/docs/11-backend-api.md) | API surface, real-time protocol, data model |
+| [`misc/docs/12-security-privacy.md`](misc/docs/12-security-privacy.md) | Threat model, data inventory, responsible-use position |
+| [`misc/docs/13-deployment-ops.md`](misc/docs/13-deployment-ops.md) | Packaging, release gates, observability without telemetry, runbooks |
+| [`misc/docs/14-testing-strategy.md`](misc/docs/14-testing-strategy.md) | Software correctness — distinct from model quality in `08-evals.md` |
+| [`misc/docs/15-workstreams.md`](misc/docs/15-workstreams.md) | Parallel workstreams, file ownership, frozen interface contracts |
+| [`misc/docs/16-roadmap.md`](misc/docs/16-roadmap.md) | Stages defined by evidence and dependency |
+| [`misc/docs/17-decisions.md`](misc/docs/17-decisions.md) | Decision record — every consequential choice and its price |
+| [`misc/docs/18-glossary.md`](misc/docs/18-glossary.md) | Interpreting, clinical and system vocabulary |
+| [`misc/MODEL_CARD.md`](misc/MODEL_CARD.md) | Models used, intended use, prohibited use, limitations, bias |
+| [`misc/DATA_CARD.md`](misc/DATA_CARD.md) | Every data asset: provenance, sensitivity, retention |
+| [`misc/CONTRIBUTING.md`](misc/CONTRIBUTING.md) · [`misc/SECURITY.md`](misc/SECURITY.md) · [`misc/CHANGELOG.md`](misc/CHANGELOG.md) | Contribution, disclosure, release discipline |
 
 ---
 
@@ -92,8 +107,8 @@ These govern every document and every line of code. A change that violates one i
 
 ## Status
 
-Early. The architecture, evaluation design and interface are specified; the calibration anchor described in `SETUP.md` §6 is the gating prerequisite for any performance claim. No performance numbers are published in this repository until that calibration exists and is measured on a sealed split.
+Early. The architecture, evaluation design and interface are specified; the calibration anchor described in [`misc/SETUP.md`](misc/SETUP.md) §6 is the gating prerequisite for any performance claim. No performance numbers are published in this repository until that calibration exists and is measured on a sealed split.
 
 ## Licence
 
-Apache-2.0. See [`LICENSE`](LICENSE).
+MIT. See [`LICENSE`](LICENSE).
